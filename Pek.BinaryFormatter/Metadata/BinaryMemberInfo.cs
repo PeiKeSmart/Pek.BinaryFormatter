@@ -28,7 +28,7 @@ public class BinaryMemberInfo
             }
             ushort nameLen = (ushort)(NameAsUtf8Bytes == null ? 0 : NameAsUtf8Bytes.Length);
             int len = 2 + 2 + nameLen + 2;
-
+           
             byte[] data = new byte[len];
 
             int position = 0;

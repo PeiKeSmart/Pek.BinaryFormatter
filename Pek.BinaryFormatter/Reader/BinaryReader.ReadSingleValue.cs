@@ -1,14 +1,18 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Text;
 
-namespace Pek.BinaryFormatter;
-
-public ref partial struct BinaryReader
+namespace Xfrogcn.BinaryFormatter
 {
-    public float GetSingle()
+    public ref partial struct BinaryReader
     {
-        Debug.Assert(ValueSpan.Length == 4);
+        public float GetSingle()
+        {
+            Debug.Assert(ValueSpan.Length == 4);
 
-        return BitConverter.ToSingle(ValueSpan);
+            return BitConverter.ToSingle(ValueSpan);
+        }
+
     }
-
 }

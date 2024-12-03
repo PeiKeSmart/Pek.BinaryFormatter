@@ -1,9 +1,13 @@
-﻿namespace Pek.BinaryFormatter;
+﻿using System;
+using System.Runtime.InteropServices;
 
-public sealed partial class BinaryWriter
+namespace Xfrogcn.BinaryFormatter
 {
-    public void WriteStringValue(ReadOnlySpan<byte> value)
+    public sealed partial class BinaryWriter
     {
-        WriteBytesValue(value);
+        public void WriteStringValue(ReadOnlySpan<byte> value)
+        {
+            WriteBytesValue(value);
+        }
     }
 }

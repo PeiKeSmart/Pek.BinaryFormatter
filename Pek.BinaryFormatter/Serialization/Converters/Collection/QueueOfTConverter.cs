@@ -1,27 +1,32 @@
-﻿namespace Pek.BinaryFormatter;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
-internal sealed class QueueOfTConverter<TCollection, TElement>
-      : IEnumeratorOfTConverter<TCollection, TElement>
-      where TCollection : Queue<TElement>
+namespace Xfrogcn.BinaryFormatter.Serialization.Converters
 {
-    protected override void Add(in TElement value, ref ReadStack state)
+    internal sealed class QueueOfTConverter<TCollection, TElement>
+        : IEnumeratorOfTConverter<TCollection, TElement>
+        where TCollection : Queue<TElement>
     {
-        ((TCollection)state.Current.ReturnValue!).Enqueue(value);
-    }
-
-    protected override void CreateCollection(ref BinaryReader reader, ref ReadStack state, BinarySerializerOptions options, ulong len)
-    {
-        if (state.Current.BinaryClassInfo.CreateObject == null)
+        protected override void Add(in TElement value, ref ReadStack state)
         {
-            ThrowHelper.ThrowNotSupportedException_SerializationNotSupported(state.Current.BinaryClassInfo.Type);
+            ((TCollection)state.Current.ReturnValue!).Enqueue(value);
         }
 
-        state.Current.ReturnValue = state.Current.BinaryClassInfo.CreateObject();
-    }
+        protected override void CreateCollection(ref BinaryReader reader, ref ReadStack state, BinarySerializerOptions options, ulong len)
+        {
+            if (state.Current.BinaryClassInfo.CreateObject == null)
+            {
+                ThrowHelper.ThrowNotSupportedException_SerializationNotSupported(state.Current.BinaryClassInfo.Type);
+            }
 
-    protected override long GetLength(TCollection value, BinarySerializerOptions options, ref WriteStack state)
-    {
-        return value.Count;
-    }
+            state.Current.ReturnValue = state.Current.BinaryClassInfo.CreateObject();
+        }
 
+        protected override long GetLength(TCollection value, BinarySerializerOptions options, ref WriteStack state)
+        {
+            return value.Count;
+        }
+
+    }
 }

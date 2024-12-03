@@ -1,9 +1,12 @@
-﻿namespace Pek.BinaryFormatter;
+﻿using System;
 
-public sealed partial class BinaryWriter
+namespace Xfrogcn.BinaryFormatter
 {
-    public void WriteUInt16Value(ushort value)
+    public sealed partial class BinaryWriter
     {
-        BitConverter.TryWriteBytes(TryGetWriteSpan(2), value);
+        public void WriteUInt16Value(ushort value)
+        {
+            BitConverter.TryWriteBytes(TryGetWriteSpan(2), value);
+        }
     }
 }

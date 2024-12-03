@@ -1,10 +1,15 @@
-﻿namespace Pek.BinaryFormatter;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Text;
 
-public ref partial struct BinaryReader
+namespace Xfrogcn.BinaryFormatter
 {
-    private readonly static Dictionary<TypeEnum, int> _binaryTypeToBytesLen
-        = new Dictionary<TypeEnum, int>()
-        {
+    public ref partial struct BinaryReader
+    {
+        private readonly static Dictionary<TypeEnum, int> _binaryTypeToBytesLen
+            = new Dictionary<TypeEnum, int>()
+            {
                 { TypeEnum.Byte, BinarySerializerConstants.BytesCount_Byte },
                 { TypeEnum.Int16 , BinarySerializerConstants.BytesCount_Int16 },
                 { TypeEnum.Int32 , BinarySerializerConstants.BytesCount_Int32 },
@@ -23,38 +28,39 @@ public ref partial struct BinaryReader
                 { TypeEnum.Boolean , BinarySerializerConstants.BytesCount_Boolean },
                 { TypeEnum.Char , BinarySerializerConstants.BytesCount_Char },
                 { TypeEnum.DBNull , BinarySerializerConstants.BytesCount_DBNull },
-        };
+            };
 
-    public bool TryReadValue(out bool success)
-    {
-        if (_typeSeq == TypeMap.NullTypeSeq)
+        public bool TryReadValue(out bool success)
         {
-            ValueSpan = ReadOnlySpan<byte>.Empty;
-            success = true;
-            return true;
-        }
-        if (CurrentTypeInfo == null || CurrentTypeInfo.Type == TypeEnum.None)
-        {
+            if(_typeSeq == TypeMap.NullTypeSeq)
+            {
+                ValueSpan = ReadOnlySpan<byte>.Empty;
+                success = true;
+                return true;
+            }
+            if (CurrentTypeInfo == null || CurrentTypeInfo.Type == TypeEnum.None)
+            {
+                success = false;
+                return false;
+            }
+
+            TypeEnum t = CurrentTypeInfo.Type;
+            if(_binaryTypeToBytesLen.ContainsKey(t))
+            {
+                success = true;
+                return ReadBytes(_binaryTypeToBytesLen[t]);
+            }
+
+            if(t == TypeEnum.ByteArray || t == TypeEnum.String)
+            {
+                success = true;
+                return ReadBytes();
+            }
+
             success = false;
             return false;
         }
 
-        TypeEnum t = CurrentTypeInfo.Type;
-        if (_binaryTypeToBytesLen.ContainsKey(t))
-        {
-            success = true;
-            return ReadBytes(_binaryTypeToBytesLen[t]);
-        }
-
-        if (t == TypeEnum.ByteArray || t == TypeEnum.String)
-        {
-            success = true;
-            return ReadBytes();
-        }
-
-        success = false;
-        return false;
+       
     }
-
-
 }

@@ -1,15 +1,19 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Text;
 
-namespace Pek.BinaryFormatter;
-
-public ref partial struct BinaryReader
+namespace Xfrogcn.BinaryFormatter
 {
-
-    public TimeSpan GetTimeSpan()
+    public ref partial struct BinaryReader
     {
-        Debug.Assert(ValueSpan.Length == 8);
+        
+        public TimeSpan GetTimeSpan()
+        {
+            Debug.Assert(ValueSpan.Length == 8);
 
-        return new TimeSpan(BitConverter.ToInt64(ValueSpan));
+            return new TimeSpan(BitConverter.ToInt64(ValueSpan));
 
+        }
     }
 }

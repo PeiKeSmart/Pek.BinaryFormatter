@@ -1,9 +1,10 @@
-﻿namespace Pek.BinaryFormatter;
-
-public sealed partial class BinaryWriter
+﻿namespace Xfrogcn.BinaryFormatter
 {
-    public void WriteNullValue()
+    public sealed partial class BinaryWriter
     {
-        WriteTypeSeq(TypeMap.NullTypeSeq);
+        public void WriteNullValue()
+        {
+            WriteTypeSeq(TypeMap.NullTypeSeq);
+        }
     }
 }

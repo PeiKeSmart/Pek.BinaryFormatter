@@ -1,23 +1,27 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Reflection;
+using System.Text;
 
-namespace Pek.BinaryFormatter;
-
-internal sealed class KeyValuePairConverter<TKey, TValue> :
-        SmallObjectWithParameterizedConstructorConverter<KeyValuePair<TKey, TValue>, TKey, TValue, object, object>
+namespace Xfrogcn.BinaryFormatter.Serialization.Converters
 {
-    private static readonly ConstructorInfo s_constructorInfo =
-        typeof(KeyValuePair<TKey, TValue>).GetConstructor(new[] { typeof(TKey), typeof(TValue) })!;
-
-    internal override void Initialize(BinarySerializerOptions options)
+    internal sealed class KeyValuePairConverter<TKey, TValue> :
+        SmallObjectWithParameterizedConstructorConverter<KeyValuePair<TKey, TValue>, TKey, TValue, object, object>
     {
-        ConstructorInfo = s_constructorInfo;
-        Debug.Assert(ConstructorInfo != null);
-    }
+        private static readonly ConstructorInfo s_constructorInfo =
+            typeof(KeyValuePair<TKey, TValue>).GetConstructor(new[] { typeof(TKey), typeof(TValue) })!;
 
-    public override void SetTypeMetadata(BinaryTypeInfo typeInfo, TypeMap typeMap, BinarySerializerOptions options)
-    {
-        typeInfo.Type = TypeEnum.KeyValuePair;
-        typeInfo.SerializeType = ClassType.Object;
+        internal override void Initialize(BinarySerializerOptions options)
+        {
+            ConstructorInfo = s_constructorInfo;
+            Debug.Assert(ConstructorInfo != null);
+        }
+
+        public override void SetTypeMetadata(BinaryTypeInfo typeInfo, TypeMap typeMap, BinarySerializerOptions options)
+        {
+            typeInfo.Type = TypeEnum.KeyValuePair;
+            typeInfo.SerializeType = ClassType.Object;
+        }
     }
 }

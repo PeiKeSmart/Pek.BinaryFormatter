@@ -1,16 +1,18 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
 
-namespace Pek.BinaryFormatter;
-
-public sealed partial class BinaryWriter
+namespace Xfrogcn.BinaryFormatter
 {
-    public void WriteComplexValue(Complex value)
+    public sealed partial class BinaryWriter
     {
-        Span<byte> data = stackalloc byte[8 * 2];
+        public void WriteComplexValue(Complex value)
+        {
+            Span<byte> data = stackalloc byte[8 * 2];
 
-        BitConverter.GetBytes(value.Real).CopyTo(data);
-        BitConverter.GetBytes(value.Imaginary).CopyTo(data.Slice(8));
-
-        WriteBytesValue(data);
+            BitConverter.GetBytes(value.Real).CopyTo(data);
+            BitConverter.GetBytes(value.Imaginary).CopyTo(data.Slice(8));
+            
+            WriteBytesValue(data);
+        }
     }
 }

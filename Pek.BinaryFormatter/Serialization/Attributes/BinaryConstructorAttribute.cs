@@ -1,13 +1,18 @@
-﻿namespace Pek.BinaryFormatter;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
-/// <summary>
-/// 标记序列化时所使用的构造器方法
-/// </summary>
-[AttributeUsage(AttributeTargets.Constructor, AllowMultiple = false)]
-public sealed class BinaryConstructorAttribute : BinaryAttribute
+namespace Xfrogcn.BinaryFormatter.Serialization
 {
-    public BinaryConstructorAttribute()
+    /// <summary>
+    /// 标记序列化时所使用的构造器方法
+    /// </summary>
+    [AttributeUsage( AttributeTargets.Constructor, AllowMultiple = false)]
+    public sealed class BinaryConstructorAttribute : BinaryAttribute
     {
+        public BinaryConstructorAttribute()
+        {
 
+        }
     }
 }

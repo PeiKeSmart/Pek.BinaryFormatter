@@ -1,37 +1,39 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 
-namespace Pek.BinaryFormatter;
-
-/// <summary>
-/// Represents a strongly-typed parameter to prevent boxing where have less than 4 parameters.
-/// Holds relevant state like the default value of the parameter, and the position in the method's parameter list.
-/// </summary>
-internal class BinaryParameterInfo<T> : BinaryParameterInfo
+namespace Xfrogcn.BinaryFormatter.Serialization
 {
-    public T TypedDefaultValue { get; private set; } = default!;
-
-    public override void Initialize(
-        TypeMap typeMap,
-        Type runtimePropertyType,
-        ParameterInfo parameterInfo,
-        BinaryPropertyInfo matchingProperty,
-        BinarySerializerOptions options)
+    /// <summary>
+    /// Represents a strongly-typed parameter to prevent boxing where have less than 4 parameters.
+    /// Holds relevant state like the default value of the parameter, and the position in the method's parameter list.
+    /// </summary>
+    internal class BinaryParameterInfo<T> : BinaryParameterInfo
     {
-        base.Initialize(
-            typeMap,
-            runtimePropertyType,
-            parameterInfo,
-            matchingProperty,
-            options);
+        public T TypedDefaultValue { get; private set; } = default!;
 
-        if (parameterInfo != null && parameterInfo.HasDefaultValue)
+        public override void Initialize(
+            TypeMap typeMap,
+            Type runtimePropertyType,
+            ParameterInfo parameterInfo,
+            BinaryPropertyInfo matchingProperty,
+            BinarySerializerOptions options)
         {
-            DefaultValue = parameterInfo.DefaultValue;
-            TypedDefaultValue = (T)parameterInfo.DefaultValue!;
-        }
-        else
-        {
-            DefaultValue = TypedDefaultValue;
+            base.Initialize(
+                typeMap,
+                runtimePropertyType,
+                parameterInfo,
+                matchingProperty,
+                options);
+
+            if (parameterInfo!=null && parameterInfo.HasDefaultValue)
+            {
+                DefaultValue = parameterInfo.DefaultValue;
+                TypedDefaultValue = (T)parameterInfo.DefaultValue!;
+            }
+            else
+            {
+                DefaultValue = TypedDefaultValue;
+            }
         }
     }
 }

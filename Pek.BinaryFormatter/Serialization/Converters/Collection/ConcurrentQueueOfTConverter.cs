@@ -1,29 +1,29 @@
 ﻿using System.Collections.Concurrent;
-using System;
 
-namespace Pek.BinaryFormatter;
-
-internal sealed class ConcurrentQueueOfTConverter<TCollection, TElement>
-       : IEnumeratorOfTConverter<TCollection, TElement>
-       where TCollection : ConcurrentQueue<TElement>
+namespace Xfrogcn.BinaryFormatter.Serialization.Converters
 {
-    protected override void Add(in TElement value, ref ReadStack state)
+    internal sealed class ConcurrentQueueOfTConverter<TCollection, TElement>
+        : IEnumeratorOfTConverter<TCollection, TElement>
+        where TCollection : ConcurrentQueue<TElement>
     {
-        ((TCollection)state.Current.ReturnValue!).Enqueue(value);
-    }
-
-    protected override void CreateCollection(ref BinaryReader reader, ref ReadStack state, BinarySerializerOptions options, ulong len)
-    {
-        if (state.Current.BinaryClassInfo.CreateObject == null)
+        protected override void Add(in TElement value, ref ReadStack state)
         {
-            ThrowHelper.ThrowNotSupportedException_SerializationNotSupported(state.Current.BinaryClassInfo.Type);
+            ((TCollection)state.Current.ReturnValue!).Enqueue(value);
         }
 
-        state.Current.ReturnValue = state.Current.BinaryClassInfo.CreateObject();
-    }
+        protected override void CreateCollection(ref BinaryReader reader, ref ReadStack state, BinarySerializerOptions options, ulong len)
+        {
+            if (state.Current.BinaryClassInfo.CreateObject == null)
+            {
+                ThrowHelper.ThrowNotSupportedException_SerializationNotSupported(state.Current.BinaryClassInfo.Type);
+            }
 
-    protected override long GetLength(TCollection value, BinarySerializerOptions options, ref WriteStack state)
-    {
-        return value.Count;
+            state.Current.ReturnValue = state.Current.BinaryClassInfo.CreateObject();
+        }
+
+        protected override long GetLength(TCollection value, BinarySerializerOptions options, ref WriteStack state)
+        {
+            return value.Count;
+        }
     }
 }

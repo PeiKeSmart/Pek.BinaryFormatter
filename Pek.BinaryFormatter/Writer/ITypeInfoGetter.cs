@@ -1,8 +1,11 @@
-﻿namespace Pek.BinaryFormatter;
+﻿using System;
 
-public interface ITypeInfoGetter
+namespace Xfrogcn.BinaryFormatter
 {
-    bool CanProcess(Type type);
+    public interface ITypeInfoGetter
+    {
+        bool CanProcess(Type type);
 
-    BinaryTypeInfo GetTypeInfo(Type type, TypeInfoGetterContext context);
+        BinaryTypeInfo GetTypeInfo(Type type, TypeInfoGetterContext context);
+    }
 }

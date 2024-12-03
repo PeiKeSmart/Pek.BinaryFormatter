@@ -2,7 +2,7 @@
 //using System.Collections;
 //using System.Collections.Generic;
 
-//namespace Pek.BinaryFormatter
+//namespace Xfrogcn.BinaryFormatter.Serialization.Converters
 //{
 //    internal sealed class ICollectionConverter<TCollection>
 //        : IEnumeratorOfTConverter<TCollection, object>
@@ -10,7 +10,7 @@
 //    {
 //        protected override void Add(in object value, ref ReadStack state)
 //        {
-
+            
 //            TCollection collection = (TCollection)state.Current.ReturnValue!;
 
 //            collection.Add(value);
@@ -33,6 +33,6 @@
 //            return value.Count;
 //        }
 
-
+        
 //    }
 //}

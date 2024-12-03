@@ -1,24 +1,28 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Text;
 
-namespace Pek.BinaryFormatter;
-
-public ref partial struct BinaryReader
+namespace Xfrogcn.BinaryFormatter
 {
-    public ulong ReadUInt64Value()
+    public ref partial struct BinaryReader
     {
-        if (ReadBytes(8, out ReadOnlySpan<byte> val))
+        public ulong ReadUInt64Value()
         {
-            return BitConverter.ToUInt64(val);
+            if (ReadBytes(8, out ReadOnlySpan<byte> val))
+            {
+                return BitConverter.ToUInt64(val);
+            }
+
+            throw new InvalidOperationException();
+
         }
 
-        throw new InvalidOperationException();
+        public ulong GetUInt64()
+        {
+            Debug.Assert(ValueSpan.Length == 8);
 
-    }
-
-    public ulong GetUInt64()
-    {
-        Debug.Assert(ValueSpan.Length == 8);
-
-        return BitConverter.ToUInt64(ValueSpan);
+            return BitConverter.ToUInt64(ValueSpan);
+        }
     }
 }

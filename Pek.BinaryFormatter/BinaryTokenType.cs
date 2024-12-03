@@ -1,17 +1,18 @@
-﻿namespace Pek.BinaryFormatter;
-
-public enum BinaryTokenType : Byte
+﻿namespace Xfrogcn.BinaryFormatter
 {
-    None,
-    StartObject,
-    ObjectRef,
-    EndObject,
-    StartArray,
-    EndArray,
-    PropertyName,
-    TypeSeq,
-    DictionaryKeySeq,
-    EndDictionaryKey,
-    Bytes,
-    Null
+    public enum BinaryTokenType : byte
+    {
+        None,
+        StartObject,
+        ObjectRef,
+        EndObject,
+        StartArray,
+        EndArray,
+        PropertyName,
+        TypeSeq,
+        DictionaryKeySeq,
+        EndDictionaryKey,
+        Bytes,
+        Null
+    }
 }

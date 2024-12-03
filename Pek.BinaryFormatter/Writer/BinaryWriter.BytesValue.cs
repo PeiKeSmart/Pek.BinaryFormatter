@@ -1,32 +1,37 @@
-﻿namespace Pek.BinaryFormatter;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
-public sealed partial class BinaryWriter
+namespace Xfrogcn.BinaryFormatter
 {
-    public void WriteBytesValue(ReadOnlySpan<byte> value)
+    public sealed partial class BinaryWriter
     {
-        int len = value.Length;
-        if (len > BinarySerializerConstants.EndObjectSeq)
+        public void WriteBytesValue(ReadOnlySpan<byte> value)
         {
-            ReadOnlySpan<byte> lenBytes = BitConverter.GetBytes(len);
-            Span<byte> bytes = stackalloc byte[4];
-            bytes[0] = (byte)(len >> 24 | (byte)0x80);
-            bytes[1] = (byte)(len >> 16 & 0xFF);
-            bytes[2] = (byte)(len >> 8 & 0xFF);
-            bytes[3] = (byte)(len & 0xFF);
+            int len = value.Length;
+            if(len > BinarySerializerConstants.EndObjectSeq)
+            {
+                ReadOnlySpan<byte> lenBytes = BitConverter.GetBytes(len);
+                Span<byte> bytes = stackalloc byte[4];
+                bytes[0] = (byte)(len>>24 | (byte)0x80);
+                bytes[1] = (byte)(len >> 16 & 0xFF);
+                bytes[2] = (byte)(len >> 8 & 0xFF);
+                bytes[3] = (byte)(len & 0xFF);
 
-            WriteBytes(bytes);
-        }
-        else
-        {
-            Span<byte> bytes = stackalloc byte[2];
-            bytes[0] = (byte)(len >> 8);
-            bytes[1] = (byte)(len & 0xFF);
-            WriteBytes(bytes);
-        }
+                WriteBytes(bytes);
+            }
+            else
+            {
+                Span<byte> bytes = stackalloc byte[2];
+                bytes[0] = (byte)(len >> 8);
+                bytes[1] = (byte)(len & 0xFF);
+                WriteBytes(bytes);
+            }
 
-        if (len > 0)
-        {
-            WriteBytes(value);
+            if (len > 0)
+            {
+                WriteBytes(value);
+            }
         }
     }
 }

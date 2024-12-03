@@ -1,15 +1,19 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Collections.Generic;
+using System.Runtime.Serialization;
+using System.Text;
 
-namespace Pek.BinaryFormatter;
-
-[Serializable]
-internal sealed class BinaryReaderException : BinaryException
+namespace Xfrogcn.BinaryFormatter
 {
-    public BinaryReaderException(string message, long bytePosition) : base(message, path: null, bytePosition)
+    [Serializable]
+    internal sealed class BinaryReaderException : BinaryException
     {
-    }
+        public BinaryReaderException(string message, long bytePosition) : base(message, path: null, bytePosition)
+        {
+        }
 
-    private BinaryReaderException(SerializationInfo info, StreamingContext context) : base(info, context)
-    {
+        private BinaryReaderException(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
+        }
     }
 }

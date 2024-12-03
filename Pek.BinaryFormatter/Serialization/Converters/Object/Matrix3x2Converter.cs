@@ -1,28 +1,30 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
 using System.Reflection;
 
-namespace Pek.BinaryFormatter;
-
-internal sealed class Matrix3x2Converter : LargeObjectWithParameterizedConstructorConverter<Matrix3x2>
+namespace Xfrogcn.BinaryFormatter.Serialization.Converters
 {
-    private static readonly ConstructorInfo s_constructorInfo =
-       typeof(Matrix3x2).GetConstructor(new[] { typeof(Single), typeof(Single), typeof(Single), typeof(Single), typeof(Single), typeof(Single) })!;
-
-    public Matrix3x2Converter()
+    internal sealed class Matrix3x2Converter : LargeObjectWithParameterizedConstructorConverter<Matrix3x2>
     {
-        ConstructorInfo = s_constructorInfo;
-    }
+        private static readonly ConstructorInfo s_constructorInfo =
+           typeof(Matrix3x2).GetConstructor(new[] { typeof(Single), typeof(Single), typeof(Single), typeof(Single), typeof(Single), typeof(Single) })!;
 
-    public override bool CanConvert(Type typeToConvert)
-    {
-        return typeToConvert == typeof(Matrix3x2);
-    }
+        public Matrix3x2Converter()
+        {
+            ConstructorInfo = s_constructorInfo;
+        }
 
-    internal override bool IncludeFields => true;
+        public override bool CanConvert(Type typeToConvert)
+        {
+            return typeToConvert == typeof(Matrix3x2);
+        }
 
-    public override void SetTypeMetadata(BinaryTypeInfo typeInfo, TypeMap typeMap, BinarySerializerOptions options)
-    {
-        typeInfo.Type = TypeEnum.Matrix3x2;
-        typeInfo.SerializeType = ClassType.Object;
+        internal override bool IncludeFields => true;
+
+        public override void SetTypeMetadata(BinaryTypeInfo typeInfo, TypeMap typeMap, BinarySerializerOptions options)
+        {
+            typeInfo.Type = TypeEnum.Matrix3x2;
+            typeInfo.SerializeType = ClassType.Object;
+        }
     }
 }

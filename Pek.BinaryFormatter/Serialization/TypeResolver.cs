@@ -1,8 +1,13 @@
-﻿namespace Pek.BinaryFormatter;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
-public abstract class TypeResolver
+namespace Xfrogcn.BinaryFormatter
 {
-    public abstract string TryGetTypeFullName(Type type);
+    public abstract class TypeResolver
+    {
+        public abstract string TryGetTypeFullName(Type type);
 
-    public abstract bool TryResolveType(TypeMap typeMap, BinaryTypeInfo typeInfo, out Type type);
+        public abstract bool TryResolveType(TypeMap typeMap, BinaryTypeInfo typeInfo, out Type type);
+    }
 }

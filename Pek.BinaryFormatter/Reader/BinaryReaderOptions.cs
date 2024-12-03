@@ -1,30 +1,34 @@
-﻿namespace Pek.BinaryFormatter;
+﻿using System;
 
-public struct BinaryReaderOptions
+namespace Xfrogcn.BinaryFormatter
 {
-    internal const Int32 DefaultMaxDepth = 64;
-
-    private Int32 _maxDepth;
-
-    /// <summary>
-    /// Gets or sets the maximum depth allowed when reading Binary, with the default (i.e. 0) indicating a max depth of 64.
-    /// </summary>
-    /// <exception cref="ArgumentOutOfRangeException">
-    /// Thrown when the max depth is set to a negative value.
-    /// </exception>
-    /// <remarks>
-    /// Reading past this depth will throw a <exception cref="BinaryException"/>.
-    /// </remarks>
-    public Int32 MaxDepth
+    public struct BinaryReaderOptions
     {
-        readonly get => _maxDepth;
-        set
+        internal const int DefaultMaxDepth = 64;
+
+        private int _maxDepth;
+        
+
+        /// <summary>
+        /// Gets or sets the maximum depth allowed when reading Binary, with the default (i.e. 0) indicating a max depth of 64.
+        /// </summary>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// Thrown when the max depth is set to a negative value.
+        /// </exception>
+        /// <remarks>
+        /// Reading past this depth will throw a <exception cref="BinaryException"/>.
+        /// </remarks>
+        public int MaxDepth
         {
-            if (value < 0)
-                throw ThrowHelper.GetArgumentOutOfRangeException_MaxDepthMustBePositive(nameof(value));
+            readonly get => _maxDepth;
+            set
+            {
+                if (value < 0)
+                    throw ThrowHelper.GetArgumentOutOfRangeException_MaxDepthMustBePositive(nameof(value));
 
-            _maxDepth = value;
+                _maxDepth = value;
+            }
         }
-    }
 
+    }
 }

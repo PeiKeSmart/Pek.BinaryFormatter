@@ -1,13 +1,14 @@
 ﻿using System.Numerics;
 
-namespace Pek.BinaryFormatter;
-
-public sealed partial class BinaryWriter
+namespace Xfrogcn.BinaryFormatter
 {
-    public void WriteBigIntegerValue(BigInteger value)
+    public sealed partial class BinaryWriter
     {
-        byte[] values = value.ToByteArray();
-        WriteBytesValue(values);
-
+        public void WriteBigIntegerValue(BigInteger value)
+        {
+            byte[] values = value.ToByteArray() ;
+            WriteBytesValue(values);
+            
+        }
     }
 }

@@ -1,14 +1,20 @@
-﻿namespace Pek.BinaryFormatter;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Text;
 
-public ref partial struct BinaryReader
+namespace Xfrogcn.BinaryFormatter
 {
-    public sbyte GetSByte()
+    public ref partial struct BinaryReader
     {
-        if (ValueSpan.Length != 1)
+        public sbyte GetSByte()
         {
-            throw new Exception();
-        }
+            if(ValueSpan.Length != 1)
+            {
+                throw new Exception();
+            }
 
-        return unchecked((sbyte)ValueSpan[0]);
+            return unchecked((sbyte)ValueSpan[0]);
+        }
     }
 }

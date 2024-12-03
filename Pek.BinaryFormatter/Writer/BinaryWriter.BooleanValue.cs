@@ -1,9 +1,12 @@
-﻿namespace Pek.BinaryFormatter;
+﻿using System;
 
-public sealed partial class BinaryWriter
+namespace Xfrogcn.BinaryFormatter
 {
-    public void WriteBooleanValue(bool value)
+    public sealed partial class BinaryWriter 
     {
-        WriteByteValue(value ? 1 : 0);
+        public void WriteBooleanValue(bool value)
+        {
+            WriteByteValue(value ? 1 : 0);
+        }
     }
 }

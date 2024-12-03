@@ -1,7 +1,9 @@
-﻿namespace Pek.BinaryFormatter;
-
-public class ReferenceID
+﻿using System;
+namespace Xfrogcn.BinaryFormatter.Serialization
 {
-    public uint RefSeq;
+    public class ReferenceID
+    {
+        public uint RefSeq;
 
+    }
 }

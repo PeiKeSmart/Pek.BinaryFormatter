@@ -1,12 +1,10 @@
 ﻿using System.Text;
 
-using Pek.BinaryFormatter.Serialization;
-
 namespace Pek.BinaryFormatter;
 
 public class BinaryTypeInfo
 {
-    internal ushort Seq { get; set; }
+    internal ushort Seq { get;  set; }
 
     internal ClassType SerializeType { get; set; }
 
@@ -19,7 +17,7 @@ public class BinaryTypeInfo
 
     internal ushort[] GenericArguments { get; set; }
 
-    // internal BinaryMemberInfo[] MemberInfos { get; set; }
+   // internal BinaryMemberInfo[] MemberInfos { get; set; }
 
     internal Dictionary<ushort, BinaryMemberInfo> MemberInfos { get; set; }
 
@@ -61,7 +59,7 @@ public class BinaryTypeInfo
             position += 2;
 
             data[position++] = (byte)SerializeType;
-            data[position++] = IsGeneric ? (byte)1 : (byte)0;
+            data[position++] = IsGeneric ? 1 : 0;
             data[position++] = GenericArgumentCount;
 
             if (GenericArguments != null && GenericArguments.Length > 0)
@@ -92,7 +90,7 @@ public class BinaryTypeInfo
 
     public override string ToString()
     {
-        if (string.IsNullOrEmpty(FullName))
+        if(string.IsNullOrEmpty(FullName))
         {
             return Type.ToString();
         }
@@ -107,7 +105,7 @@ public class BinaryTypeInfo
             return _fullName;
         }
 
-        if (!IsGeneric)
+        if(!IsGeneric)
         {
             _fullName = this.ToString();
         }
@@ -116,7 +114,7 @@ public class BinaryTypeInfo
             StringBuilder sb = new StringBuilder();
             sb.Append(this.ToString()).Append("<");
             bool isFirst = true;
-            foreach (ushort s in GenericArguments)
+            foreach(ushort s in GenericArguments)
             {
                 if (!isFirst)
                 {
@@ -128,7 +126,7 @@ public class BinaryTypeInfo
                 }
                 BinaryTypeInfo ti = typeMap.GetTypeInfo(s);
                 sb.Append(ti.GetFullName(typeMap));
-
+                
             }
             sb.Append(">");
             _fullName = sb.ToString();

@@ -1,6 +1,11 @@
-﻿namespace Pek.BinaryFormatter;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
-public class TypeInfoGetterContext
+namespace Xfrogcn.BinaryFormatter
 {
-    public ushort TypeSeq { get; internal set; }
+    public class TypeInfoGetterContext
+    {
+        public ushort TypeSeq { get; internal set; }
+    }
 }

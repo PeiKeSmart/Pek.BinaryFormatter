@@ -1,9 +1,14 @@
-﻿namespace Pek.BinaryFormatter;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
-public enum SerializeTypeEnum : SByte
+namespace Xfrogcn.BinaryFormatter
 {
-    Null = 0,
-    SingleValue = 1,
-    KeyValuePair = 2,
-    List = 3
+    public enum SerializeTypeEnum : sbyte
+    {
+        Null = 0,
+        SingleValue = 1,
+        KeyValuePair = 2,
+        List = 3
+    }
 }

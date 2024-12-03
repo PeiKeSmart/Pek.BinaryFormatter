@@ -1,14 +1,17 @@
-﻿namespace Pek.BinaryFormatter;
+﻿using System;
 
-public sealed partial class BinaryWriter
+namespace Xfrogcn.BinaryFormatter
 {
-    public void WriteDateTimeValue(DateTime value)
+    public sealed partial class BinaryWriter
     {
-        Span<byte> output = stackalloc byte[9];
-        output[0] = (byte)value.Kind;
+        public void WriteDateTimeValue(DateTime value)
+        {
+            Span<byte> output = stackalloc byte[9];
+            output[0] = (byte)value.Kind;
 
-        BitConverter.TryWriteBytes(output.Slice(1), value.Ticks);
+            BitConverter.TryWriteBytes(output.Slice(1), value.Ticks);
 
-        WriteBytes(output);
+            WriteBytes(output);
+        }
     }
 }

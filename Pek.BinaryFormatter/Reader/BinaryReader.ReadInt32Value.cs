@@ -1,16 +1,21 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Text;
 
-namespace Pek.BinaryFormatter;
-
-public ref partial struct BinaryReader
+namespace Xfrogcn.BinaryFormatter
 {
-
-    public int GetInt32()
+    public ref partial struct BinaryReader
     {
-        Debug.Assert(ValueSpan.Length == 4);
+        
 
-        return BitConverter.ToInt32(ValueSpan);
+        public int GetInt32()
+        {
+            Debug.Assert(ValueSpan.Length == 4);
+
+            return BitConverter.ToInt32(ValueSpan);
+        }
+
+       
     }
-
-
 }

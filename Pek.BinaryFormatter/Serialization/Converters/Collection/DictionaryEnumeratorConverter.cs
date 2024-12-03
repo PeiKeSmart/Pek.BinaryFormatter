@@ -1,63 +1,67 @@
-﻿namespace Pek.BinaryFormatter;
+﻿using System;
+using System.Collections.Generic;
 
-internal abstract class DictionaryEnumeratorConverter<TCollection, TKey, TValue> : DictionaryDefaultConverter<TCollection, TKey, TValue>
-       where TCollection : IEnumerable<KeyValuePair<TKey, TValue>>
-       where TKey : notnull
+namespace Xfrogcn.BinaryFormatter.Serialization.Converters
 {
-
-    protected internal override bool OnWriteResume(BinaryWriter writer, TCollection dictionary, BinarySerializerOptions options, ref WriteStack state)
+    internal abstract class DictionaryEnumeratorConverter<TCollection, TKey, TValue> : DictionaryDefaultConverter<TCollection, TKey, TValue>
+        where TCollection : IEnumerable<KeyValuePair<TKey, TValue>>
+        where TKey : notnull
     {
-        IEnumerator<KeyValuePair<TKey, TValue>> enumerator;
-        if (state.Current.CollectionEnumerator == null)
+
+        protected internal override bool OnWriteResume(BinaryWriter writer, TCollection dictionary, BinarySerializerOptions options, ref WriteStack state)
         {
-            enumerator = dictionary.GetEnumerator();
-            if (!enumerator.MoveNext())
+            IEnumerator<KeyValuePair<TKey, TValue>> enumerator;
+            if (state.Current.CollectionEnumerator == null)
             {
-                return true;
+                enumerator = dictionary.GetEnumerator();
+                if (!enumerator.MoveNext())
+                {
+                    return true;
+                }
             }
-        }
-        else
-        {
-            enumerator = (IEnumerator<KeyValuePair<TKey, TValue>>)state.Current.CollectionEnumerator;
-        }
-
-        if (!state.SupportContinuation)
-        {
-            do
+            else
             {
-                WriteKey(writer, enumerator.Current.Key, options, ref state);
-                WriteValue(writer, enumerator.Current.Value, options, ref state);
+                enumerator = (IEnumerator<KeyValuePair<TKey, TValue>>)state.Current.CollectionEnumerator;
+            }
 
-                state.Current.EndDictionaryElement();
-            } while (enumerator.MoveNext());
-        }
-        else
-        {
-            do
+            if (!state.SupportContinuation)
             {
-                if (ShouldFlush(writer, ref state))
+                do
                 {
-                    state.Current.CollectionEnumerator = enumerator;
-                    return false;
-                }
+                    WriteKey(writer, enumerator.Current.Key, options, ref state);
+                    WriteValue(writer, enumerator.Current.Value, options, ref state);
 
-                if (!WriteKey(writer, enumerator.Current.Key, options, ref state))
+                    state.Current.EndDictionaryElement();
+                } while (enumerator.MoveNext());
+            }
+            else
+            {
+                do
                 {
-                    state.Current.CollectionEnumerator = enumerator;
-                    return false;
-                }
+                    if (ShouldFlush(writer, ref state))
+                    {
+                        state.Current.CollectionEnumerator = enumerator;
+                        return false;
+                    }
 
-                if (!WriteValue(writer, enumerator.Current.Value, options, ref state))
-                {
-                    state.Current.CollectionEnumerator = enumerator;
-                    return false;
-                }
+                    if (!WriteKey(writer, enumerator.Current.Key, options, ref state))
+                    {
+                        state.Current.CollectionEnumerator = enumerator;
+                        return false;
+                    }
 
-                state.Current.EndDictionaryElement();
-            } while (enumerator.MoveNext());
+                    if (!WriteValue(writer, enumerator.Current.Value, options, ref state))
+                    {
+                        state.Current.CollectionEnumerator = enumerator;
+                        return false;
+                    }
 
+                    state.Current.EndDictionaryElement();
+                } while (enumerator.MoveNext());
+
+            }
+
+            return true;
         }
-
-        return true;
     }
 }

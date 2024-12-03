@@ -1,15 +1,18 @@
-﻿namespace Pek.BinaryFormatter;
+﻿using System;
 
-public sealed partial class BinaryWriter
+namespace Xfrogcn.BinaryFormatter
 {
-    public void WriteSByteValue(sbyte value)
+    public sealed partial class BinaryWriter
     {
-        if (_memory.Length - BytesPending < 1)
+        public void WriteSByteValue(sbyte value)
         {
-            Grow(1);
-        }
+            if (_memory.Length - BytesPending < 1)
+            {
+                Grow(1);
+            }
 
-        Span<byte> output = _memory.Span;
-        output[BytesPending++] = unchecked((byte)value);
+            Span<byte> output = _memory.Span;
+            output[BytesPending++] = unchecked((byte)value);
+        }
     }
 }

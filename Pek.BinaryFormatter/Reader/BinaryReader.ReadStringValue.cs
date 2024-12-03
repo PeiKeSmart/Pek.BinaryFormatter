@@ -1,34 +1,38 @@
-﻿using System.Text;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Text;
 
-namespace Pek.BinaryFormatter;
-
-public ref partial struct BinaryReader
+namespace Xfrogcn.BinaryFormatter
 {
-    public string ReadStringValue(int bytes)
+    public ref partial struct BinaryReader
     {
-        if (ReadBytes(bytes, out ReadOnlySpan<byte> val))
+        public string ReadStringValue(int bytes)
         {
-            return Encoding.UTF8.GetString(val);
+            if (ReadBytes(bytes, out ReadOnlySpan<byte> val))
+            {
+                return Encoding.UTF8.GetString(val);
+            }
+
+            throw new InvalidOperationException();
+
         }
 
-        throw new InvalidOperationException();
-
-    }
-
-    public string GetString()
-    {
-        if (_tokenType == BinaryTokenType.Null)
+        public string GetString()
         {
-            return null;
+            if (_tokenType == BinaryTokenType.Null)
+            {
+                return null;
+            }
+
+            if (TokenType != BinaryTokenType.Bytes)
+            {
+                throw ThrowHelper.GetInvalidOperationException_ExpectedString(TokenType);
+            }
+
+            ReadOnlySpan<byte> span = ValueSpan;
+
+            return BinaryReaderHelper.TranscodeHelper(span);
         }
-
-        if (TokenType != BinaryTokenType.Bytes)
-        {
-            throw ThrowHelper.GetInvalidOperationException_ExpectedString(TokenType);
-        }
-
-        ReadOnlySpan<byte> span = ValueSpan;
-
-        return BinaryReaderHelper.TranscodeHelper(span);
     }
 }
