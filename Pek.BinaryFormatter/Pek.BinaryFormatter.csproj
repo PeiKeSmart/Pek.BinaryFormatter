@@ -55,8 +55,4 @@
     <Content Include="..\Doc\DH.png" Link="DH.png" PackagePath="\" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Serialization\Converters\Value\" />
-  </ItemGroup>
-
 </Project>
