@@ -3,7 +3,7 @@
 /// <summary>
 /// 内部类型
 /// </summary>
-public enum TypeEnum : byte
+public enum TypeEnum : Byte
 {
     None = 0,
     Byte = 1,

@@ -9,24 +9,13 @@ public static class TypeExtensions
 {
     private static readonly Type s_nullableType = typeof(Nullable<>);
 
-    public static bool IsNullableValueType(this Type type)
-    {
-        return Nullable.GetUnderlyingType(type) != null;
-    }
+    public static Boolean IsNullableValueType(this Type type) => Nullable.GetUnderlyingType(type) != null;
 
-    public static bool IsNullableType(this Type type)
-    {
-        return !type.IsValueType || IsNullableValueType(type);
-    }
+    public static Boolean IsNullableType(this Type type) => !type.IsValueType || IsNullableValueType(type);
 
     public static Type GetSerializeType([NotNull] this Type type)
     {
-        if(type == null)
-        {
-            return null;
-        }
-
-        Type rt = type;
+        var rt = type;
         if (type.IsGenericType)
         {
             rt = type.GetGenericTypeDefinition();
@@ -34,43 +23,35 @@ public static class TypeExtensions
         return rt;
     }
 
-    public static byte GetGenericArgumentCount([NotNull]this Type type)
+    public static Byte GetGenericArgumentCount([NotNull]this Type type)
     {
-        if(type ==null)
-        {
-            return 0;
-        }
         if (type.IsGenericType)
         {
-            return (byte)type.GetGenericArguments().Length;
+            return (Byte)type.GetGenericArguments().Length;
         }
         return 0;
     }
 
     public static Type[] GetTypeGenericArguments([NotNull] this Type type)
     {
-        if (type == null)
-        {
-            return new Type[0];
-        }
         if (type.IsGenericType)
         {
             return type.GetGenericArguments();
         }
-        return new Type[0];
+        return [];
     }
 
-    public static ushort[] GetGenericTypeSeqs([NotNull]this Type type, [NotNull] TypeMap typeMap)
+    public static UInt16[] GetGenericTypeSeqs([NotNull]this Type type, [NotNull] TypeMap typeMap)
     {
         if (!type.IsGenericType)
         {
-            return new ushort[0];
+            return [];
         }
 
         return type.GetGenericArguments()
             .Select(t =>
             {
-                typeMap.TryAdd(t, out BinaryTypeInfo ti);
+                typeMap.TryAdd(t, out var ti);
                 return ti.Seq;
             })
             .ToArray();
@@ -114,10 +95,10 @@ public static class TypeExtensions
     /// Returns <see langword="true" /> when the given type is of type <see cref="Nullable{T}"/>.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool IsNullableOfT(this Type type) =>
+    public static Boolean IsNullableOfT(this Type type) =>
         type.IsGenericType && type.GetGenericTypeDefinition() == s_nullableType;
 
-    public static bool IsAssignableFromInternal(this Type type, Type from)
+    public static Boolean IsAssignableFromInternal(this Type type, Type from)
     {
         if (IsNullableValueType(from) && type.IsInterface)
         {
@@ -127,7 +108,7 @@ public static class TypeExtensions
         return type.IsAssignableFrom(from);
     }
 
-    public static bool IsRefId(this object instance)
+    public static Boolean IsRefId(this Object instance)
     {
         if(instance == null)
         {

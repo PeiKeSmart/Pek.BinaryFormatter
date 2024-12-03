@@ -26,6 +26,7 @@
     <IsPackable>true</IsPackable>
     <PackageId>$(AssemblyName)</PackageId>
     <Authors>$(Company)</Authors>
+    <MaintainerEmail>berin@peksmart.net</MaintainerEmail>
     <PackageProjectUrl>https://www.haocoding.com/</PackageProjectUrl>
     <PackageIcon>DH.png</PackageIcon>
     <RepositoryUrl>https://github.com/PeiKeSmart/Pek.AspNetCore</RepositoryUrl>
