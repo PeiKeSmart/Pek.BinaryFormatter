@@ -1,12 +1,6 @@
-﻿using System;
+﻿namespace Pek.BinaryFormatter;
 
-namespace Pek.BinaryFormatter
+public sealed partial class BinaryWriter 
 {
-    public sealed partial class BinaryWriter 
-    {
-        public void WriteBooleanValue(bool value)
-        {
-            WriteByteValue(value ? 1 : 0);
-        }
-    }
+    public void WriteBooleanValue(Boolean value) => WriteByteValue(value ? (Byte)1 : (Byte)0);
 }

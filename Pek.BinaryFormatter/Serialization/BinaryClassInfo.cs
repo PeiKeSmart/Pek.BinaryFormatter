@@ -2,8 +2,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
-using Pek.BinaryFormatter.Serialization;
-
 namespace Pek.BinaryFormatter;
 
 [DebuggerDisplay("ClassType.{ClassType}, {Type.Name}")]

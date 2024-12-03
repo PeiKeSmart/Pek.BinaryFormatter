@@ -1,18 +1,17 @@
-﻿namespace Pek.BinaryFormatter
+﻿namespace Pek.BinaryFormatter;
+
+public enum BinaryTokenType : byte
 {
-    public enum BinaryTokenType : byte
-    {
-        None,
-        StartObject,
-        ObjectRef,
-        EndObject,
-        StartArray,
-        EndArray,
-        PropertyName,
-        TypeSeq,
-        DictionaryKeySeq,
-        EndDictionaryKey,
-        Bytes,
-        Null
-    }
+    None,
+    StartObject,
+    ObjectRef,
+    EndObject,
+    StartArray,
+    EndArray,
+    PropertyName,
+    TypeSeq,
+    DictionaryKeySeq,
+    EndDictionaryKey,
+    Bytes,
+    Null
 }

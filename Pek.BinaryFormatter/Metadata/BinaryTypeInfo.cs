@@ -59,7 +59,7 @@ public class BinaryTypeInfo
             position += 2;
 
             data[position++] = (byte)SerializeType;
-            data[position++] = IsGeneric ? 1 : 0;
+            data[position++] = IsGeneric ? (byte)1 : (byte)0;
             data[position++] = GenericArgumentCount;
 
             if (GenericArguments != null && GenericArguments.Length > 0)

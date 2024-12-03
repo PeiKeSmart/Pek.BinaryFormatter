@@ -1,12 +1,11 @@
-﻿namespace Pek.BinaryFormatter
+﻿namespace Pek.BinaryFormatter;
+
+internal enum StackFrameWriteObjectState : byte
 {
-    internal enum StackFrameWriteObjectState : byte
-    {
-        None,
-        WriteStartToken,
-        WriteElements,
-        WriteElementsEnd,
-        WriteProperties,
-        WriteEndToken
-    }
+    None,
+    WriteStartToken,
+    WriteElements,
+    WriteElementsEnd,
+    WriteProperties,
+    WriteEndToken
 }

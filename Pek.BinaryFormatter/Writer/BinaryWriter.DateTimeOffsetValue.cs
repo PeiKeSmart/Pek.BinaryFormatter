@@ -1,17 +1,14 @@
-﻿using System;
+﻿namespace Pek.BinaryFormatter;
 
-namespace Pek.BinaryFormatter
+public sealed partial class BinaryWriter
 {
-    public sealed partial class BinaryWriter
+    public void WriteDateTimeOffsetValue(DateTimeOffset value)
     {
-        public void WriteDateTimeOffsetValue(DateTimeOffset value)
-        {
-            Span<byte> output = stackalloc byte[16];
-            
-            BitConverter.TryWriteBytes(output, value.Offset.Ticks);
-            BitConverter.TryWriteBytes(output.Slice(8, 8), value.Ticks);
+        Span<byte> output = stackalloc byte[16];
+        
+        BitConverter.TryWriteBytes(output, value.Offset.Ticks);
+        BitConverter.TryWriteBytes(output.Slice(8, 8), value.Ticks);
 
-            WriteBytes(output);
-        }
+        WriteBytes(output);
     }
 }

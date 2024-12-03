@@ -1,9 +1,7 @@
-﻿using System;
-namespace Pek.BinaryFormatter.Serialization
-{
-    public class ReferenceID
-    {
-        public uint RefSeq;
+﻿namespace Pek.BinaryFormatter;
 
-    }
+public class ReferenceID
+{
+    public uint RefSeq;
+
 }

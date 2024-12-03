@@ -1,13 +1,9 @@
-﻿using System;
-using System.Runtime.InteropServices;
+﻿namespace Pek.BinaryFormatter;
 
-namespace Pek.BinaryFormatter
+public sealed partial class BinaryWriter
 {
-    public sealed partial class BinaryWriter
+    public void WriteStringValue(ReadOnlySpan<byte> value)
     {
-        public void WriteStringValue(ReadOnlySpan<byte> value)
-        {
-            WriteBytesValue(value);
-        }
+        WriteBytesValue(value);
     }
 }

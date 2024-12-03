@@ -3,8 +3,6 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-using Pek.BinaryFormatter.Serialization;
-
 namespace Pek.BinaryFormatter;
 
 [DebuggerDisplay("ClassType.{ClassType}, {Type.Name}")]

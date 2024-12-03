@@ -1,7 +1,6 @@
-﻿namespace Pek.BinaryFormatter.Serialization
+﻿namespace Pek.BinaryFormatter;
+
+public abstract class ReferenceHandler
 {
-    public abstract class ReferenceHandler
-    {
-        public abstract ReferenceResolver CreateResolver(bool writing);
-    }
+    public abstract ReferenceResolver CreateResolver(bool writing);
 }

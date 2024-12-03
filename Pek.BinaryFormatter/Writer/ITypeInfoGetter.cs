@@ -1,11 +1,8 @@
-﻿using System;
+﻿namespace Pek.BinaryFormatter;
 
-namespace Pek.BinaryFormatter
+public interface ITypeInfoGetter
 {
-    public interface ITypeInfoGetter
-    {
-        bool CanProcess(Type type);
+    bool CanProcess(Type type);
 
-        BinaryTypeInfo GetTypeInfo(Type type, TypeInfoGetterContext context);
-    }
+    BinaryTypeInfo GetTypeInfo(Type type, TypeInfoGetterContext context);
 }

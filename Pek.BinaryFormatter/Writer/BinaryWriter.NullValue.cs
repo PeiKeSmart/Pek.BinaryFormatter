@@ -1,10 +1,9 @@
-﻿namespace Pek.BinaryFormatter
+﻿namespace Pek.BinaryFormatter;
+
+public sealed partial class BinaryWriter
 {
-    public sealed partial class BinaryWriter
+    public void WriteNullValue()
     {
-        public void WriteNullValue()
-        {
-            WriteTypeSeq(TypeMap.NullTypeSeq);
-        }
+        WriteTypeSeq(TypeMap.NullTypeSeq);
     }
 }

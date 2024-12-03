@@ -1,12 +1,9 @@
-﻿using System;
+﻿namespace Pek.BinaryFormatter;
 
-namespace Pek.BinaryFormatter
+public sealed partial class BinaryWriter
 {
-    public sealed partial class BinaryWriter
+    public void WriteInt32Value(int value)
     {
-        public void WriteInt32Value(int value)
-        {
-            BitConverter.TryWriteBytes(TryGetWriteSpan(4), value);
-        }
+        BitConverter.TryWriteBytes(TryGetWriteSpan(4), value);
     }
 }
