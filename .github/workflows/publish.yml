@@ -1,0 +1,30 @@
+name: publish
+
+on:
+  push:
+    tags: [ v* ]
+  workflow_dispatch:
+
+jobs:
+  build-publish:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup dotNET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: |
+          8.x
+          9.x
+    - name: Restore
+      run: |
+        dotnet restore Pek.BinaryFormatter/Pek.BinaryFormatter.csproj
+    - name: Build
+      run: |
+        dotnet pack --no-restore --version-suffix $(date "+%Y.%m%d") -c Release -o out Pek.BinaryFormatter/Pek.BinaryFormatter.csproj
+    - name: Publish
+      run: |
+        dotnet nuget push ./out/*.nupkg --skip-duplicate --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.nugetKey }}
+        dotnet nuget push ./out/*.nupkg --skip-duplicate --source https://nuget.chuangchu.net/v3/index.json --api-key ${{ secrets.mynugetKey }}

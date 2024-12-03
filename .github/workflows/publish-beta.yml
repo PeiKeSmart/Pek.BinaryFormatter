@@ -1,0 +1,39 @@
+name: publish-beta
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+        - 'Pek.BinaryFormatter/**'
+  pull_request:
+    branches: [ main ]
+    paths:
+        - 'Pek.BinaryFormatter/**'
+  workflow_dispatch:
+
+jobs:
+  build-publish:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup dotNET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: |
+          8.x
+          9.x
+    - name: Get Version
+      run: echo "VERSION=$(date '+%Y.%m%d-beta%H%M')" >> $GITHUB_ENV
+    - name: Build
+      run: |
+        dotnet build -c Release --version-suffix ${{ env.VERSION }}
+    - name: Pack
+      run: |
+        dotnet pack --no-build --version-suffix ${{ env.VERSION }} -c Release -o out Pek.BinaryFormatter/Pek.BinaryFormatter.csproj
+
+    - name: Publish
+      run: |
+        #dotnet nuget push ./out/*.nupkg --skip-duplicate --source https://nuget.pkg.github.com/PeiKeSmart/index.json --api-key ${{ github.token }}
+        dotnet nuget push ./out/*.nupkg --skip-duplicate --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.nugetKey }}
+        dotnet nuget push ./out/*.nupkg --skip-duplicate --source https://nuget.chuangchu.net/v3/index.json --api-key ${{ secrets.mynugetKey }}

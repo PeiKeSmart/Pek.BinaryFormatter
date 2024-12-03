@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "Pek.BinaryFormatter": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:51787;http://localhost:51788"
+    }
+  }
+}
