@@ -1,12 +1,11 @@
 ﻿using System.Numerics;
 
-namespace Xfrogcn.BinaryFormatter
+namespace Pek.BinaryFormatter;
+
+public ref partial struct BinaryReader
 {
-    public ref partial struct BinaryReader
+    public BigInteger GetBigInteger()
     {
-        public BigInteger GetBigInteger()
-        {
-            return new BigInteger(ValueSpan);
-        }
+        return new BigInteger(ValueSpan);
     }
 }

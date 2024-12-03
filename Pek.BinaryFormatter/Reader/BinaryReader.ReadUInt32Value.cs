@@ -1,27 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
+﻿using System.Diagnostics;
 
-namespace Xfrogcn.BinaryFormatter
+namespace Pek.BinaryFormatter;
+
+public ref partial struct BinaryReader
 {
-    public ref partial struct BinaryReader
+    public uint ReadUInt32Value()
     {
-        public uint ReadUInt32Value()
+        if (ReadBytes(4, out ReadOnlySpan<byte> val))
         {
-            if (ReadBytes(4, out ReadOnlySpan<byte> val))
-            {
-                return BitConverter.ToUInt32(val);
-            }
-
-            throw new InvalidOperationException();
-
+            return BitConverter.ToUInt32(val);
         }
-        public uint GetUInt32()
-        {
-            Debug.Assert(ValueSpan.Length == 4);
 
-            return BitConverter.ToUInt32(ValueSpan);
-        }
+        throw new InvalidOperationException();
+
+    }
+    public uint GetUInt32()
+    {
+        Debug.Assert(ValueSpan.Length == 4);
+
+        return BitConverter.ToUInt32(ValueSpan);
     }
 }

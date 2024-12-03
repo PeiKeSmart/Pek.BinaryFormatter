@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
-using Xfrogcn.BinaryFormatter.Serialization;
+using Pek.BinaryFormatter.Serialization;
 
-namespace Xfrogcn.BinaryFormatter
+namespace Pek.BinaryFormatter
 {
     [DebuggerDisplay("Path:{PropertyPath()} Current: ClassType.{Current.BinaryClassInfo.ClassType}, {Current.BinaryClassInfo.Type.Name}")]
     internal struct WriteStack

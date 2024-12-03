@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reflection;
 using System.Text;
-using Xfrogcn.BinaryFormatter.Serialization;
+using Pek.BinaryFormatter.Serialization;
 
-namespace Xfrogcn.BinaryFormatter
+namespace Pek.BinaryFormatter
 {
     internal sealed class BinaryPropertyInfo<T> : BinaryPropertyInfo
     {

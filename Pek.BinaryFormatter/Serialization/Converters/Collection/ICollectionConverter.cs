@@ -2,7 +2,7 @@
 //using System.Collections;
 //using System.Collections.Generic;
 
-//namespace Xfrogcn.BinaryFormatter.Serialization.Converters
+//namespace Pek.BinaryFormatter
 //{
 //    internal sealed class ICollectionConverter<TCollection>
 //        : IEnumeratorOfTConverter<TCollection, object>

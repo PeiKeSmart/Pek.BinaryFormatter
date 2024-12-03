@@ -1,5 +1,5 @@
 ﻿using System;
-namespace Xfrogcn.BinaryFormatter.Serialization
+namespace Pek.BinaryFormatter.Serialization
 {
     public class ReferenceID
     {

@@ -4,7 +4,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>Pek.BinaryFormatter</RootNamespace>
     <AssemblyTitle>二进制序列化库</AssemblyTitle>
-    <Description>基于DH框架的高性能二进制序列化库，来源于https://github.com/xfrogcn/Xfrogcn.BinaryFormatter</Description>
+    <Description>基于DH框架的高性能二进制序列化库，来源于https://github.com/xfrogcn/Pek.BinaryFormatter</Description>
     <Company>湖北登灏科技有限公司</Company>
     <Copyright>©2020-2024 湖北登灏科技有限公司</Copyright>
     <VersionPrefix>4.00</VersionPrefix>

@@ -3,10 +3,10 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reflection;
-using Xfrogcn.BinaryFormatter.Serialization;
-using Xfrogcn.BinaryFormatter.Serialization.Converters;
+using Pek.BinaryFormatter.Serialization;
+using Pek.BinaryFormatter.Serialization.Converters;
 
-namespace Xfrogcn.BinaryFormatter
+namespace Pek.BinaryFormatter
 {
     public sealed partial class BinarySerializerOptions
     {

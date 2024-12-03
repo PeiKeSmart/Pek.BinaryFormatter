@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
+﻿using System.Diagnostics;
 
-namespace Xfrogcn.BinaryFormatter
+namespace Pek.BinaryFormatter;
+
+public ref partial struct BinaryReader
 {
-    public ref partial struct BinaryReader
+    public double GetDouble()
     {
-        public double GetDouble()
-        {
-            Debug.Assert(ValueSpan.Length == 8);
+        Debug.Assert(ValueSpan.Length == 8);
 
-            return BitConverter.ToDouble(ValueSpan);
-        }
+        return BitConverter.ToDouble(ValueSpan);
     }
 }

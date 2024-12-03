@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Xfrogcn.BinaryFormatter
+namespace Pek.BinaryFormatter
 {
     [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public sealed partial class BinaryWriter : IDisposable, IAsyncDisposable

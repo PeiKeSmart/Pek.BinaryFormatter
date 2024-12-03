@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Xfrogcn.BinaryFormatter
+namespace Pek.BinaryFormatter
 {
     internal sealed class PooledByteBufferWriter : IBufferWriter<byte>, IDisposable
     {

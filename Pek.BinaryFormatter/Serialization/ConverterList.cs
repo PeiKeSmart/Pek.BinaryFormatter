@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Xfrogcn.BinaryFormatter.Serialization
+namespace Pek.BinaryFormatter.Serialization
 {
     /// <summary>
     /// A list of BinaryConverters that respects the options class being immuttable once (de)serialization occurs.

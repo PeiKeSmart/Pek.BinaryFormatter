@@ -1,6 +1,6 @@
 ﻿using System.Collections.Concurrent;
 
-namespace Xfrogcn.BinaryFormatter.Serialization.Converters
+namespace Pek.BinaryFormatter
 {
     internal sealed class ConcurrentQueueOfTConverter<TCollection, TElement>
         : IEnumeratorOfTConverter<TCollection, TElement>

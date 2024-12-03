@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ReferenceResolverCallback = System.ValueTuple<object, object, System.Action<object, object>>;
 
-namespace Xfrogcn.BinaryFormatter.Serialization
+namespace Pek.BinaryFormatter.Serialization
 {
     public class ObjectReferenceResolver : ReferenceResolver
     {

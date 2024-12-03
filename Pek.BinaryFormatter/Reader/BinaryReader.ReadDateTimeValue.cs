@@ -1,19 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
+﻿using System.Diagnostics;
 
-namespace Xfrogcn.BinaryFormatter
+namespace Pek.BinaryFormatter;
+
+public ref partial struct BinaryReader
 {
-    public ref partial struct BinaryReader
+    
+    public DateTime GetDateTime()
     {
-        
-        public DateTime GetDateTime()
-        {
-            Debug.Assert(ValueSpan.Length == 9);
+        Debug.Assert(ValueSpan.Length == 9);
 
-            return new DateTime(BitConverter.ToInt64(ValueSpan[1..]), (DateTimeKind)ValueSpan[0]);
+        return new DateTime(BitConverter.ToInt64(ValueSpan[1..]), (DateTimeKind)ValueSpan[0]);
 
-        }
     }
 }

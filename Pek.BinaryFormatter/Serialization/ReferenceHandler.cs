@@ -1,4 +1,4 @@
-﻿namespace Xfrogcn.BinaryFormatter.Serialization
+﻿namespace Pek.BinaryFormatter.Serialization
 {
     public abstract class ReferenceHandler
     {

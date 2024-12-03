@@ -1,4 +1,4 @@
-﻿namespace Xfrogcn.BinaryFormatter
+﻿namespace Pek.BinaryFormatter
 {
     internal enum StackFrameWriteObjectState : byte
     {

@@ -5,9 +5,9 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
-using static Xfrogcn.BinaryFormatter.BinaryClassInfo;
+using static Pek.BinaryFormatter.BinaryClassInfo;
 
-namespace Xfrogcn.BinaryFormatter.Serialization
+namespace Pek.BinaryFormatter.Serialization
 {
     internal sealed class ReflectionEmitMemberAccessor : MemberAccessor
     {

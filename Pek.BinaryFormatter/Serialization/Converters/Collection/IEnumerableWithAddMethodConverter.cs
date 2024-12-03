@@ -1,140 +1,138 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Diagnostics;
 
-namespace Xfrogcn.BinaryFormatter.Serialization.Converters
+namespace Pek.BinaryFormatter;
+
+internal sealed class IEnumerableWithAddMethodConverter<TCollection>
+    : IEnumerableDefaultConverter<TCollection, object>
+    where TCollection : IEnumerable
 {
-    internal sealed class IEnumerableWithAddMethodConverter<TCollection>
-        : IEnumerableDefaultConverter<TCollection, object>
-        where TCollection : IEnumerable
+    protected override void Add(in object value, ref ReadStack state)
     {
-        protected override void Add(in object value, ref ReadStack state)
+        var addMethodDelegate = ((Action<TCollection, object>)state.Current.BinaryClassInfo.AddMethodDelegate);
+        Debug.Assert(addMethodDelegate != null);
+        addMethodDelegate((TCollection)state.Current.ReturnValue!, value);
+    }
+
+    protected override void CreateCollection(ref BinaryReader reader, ref ReadStack state, BinarySerializerOptions options, ulong len)
+    {
+        BinaryClassInfo classInfo = state.Current.BinaryClassInfo;
+        BinaryClassInfo.ConstructorDelegate constructorDelegate = classInfo.CreateObject;
+
+        if (constructorDelegate == null)
         {
-            var addMethodDelegate = ((Action<TCollection, object>)state.Current.BinaryClassInfo.AddMethodDelegate);
-            Debug.Assert(addMethodDelegate != null);
-            addMethodDelegate((TCollection)state.Current.ReturnValue!, value);
+            ThrowHelper.ThrowNotSupportedException_CannotPopulateCollection(TypeToConvert, ref reader, ref state);
         }
 
-        protected override void CreateCollection(ref BinaryReader reader, ref ReadStack state, BinarySerializerOptions options, ulong len)
+        if (classInfo.AddMethodDelegate == null)
         {
-            BinaryClassInfo classInfo = state.Current.BinaryClassInfo;
-            BinaryClassInfo.ConstructorDelegate constructorDelegate = classInfo.CreateObject;
-
-            if (constructorDelegate == null)
+            Action<TCollection, object> addDelegate = options.MemberAccessorStrategy.CreateIEnumerableAddMethod<TCollection, object>();
+            if (addDelegate == null)
             {
                 ThrowHelper.ThrowNotSupportedException_CannotPopulateCollection(TypeToConvert, ref reader, ref state);
             }
 
-            if (classInfo.AddMethodDelegate == null)
-            {
-                Action<TCollection, object> addDelegate = options.MemberAccessorStrategy.CreateIEnumerableAddMethod<TCollection, object>();
-                if (addDelegate == null)
-                {
-                    ThrowHelper.ThrowNotSupportedException_CannotPopulateCollection(TypeToConvert, ref reader, ref state);
-                }
-
-                classInfo.AddMethodDelegate = addDelegate;
-            }
-
-            state.Current.ReturnValue = constructorDelegate();
+            classInfo.AddMethodDelegate = addDelegate;
         }
 
-        protected override long GetLength(TCollection value, BinarySerializerOptions options, ref WriteStack state)
+        state.Current.ReturnValue = constructorDelegate();
+    }
+
+    protected override long GetLength(TCollection value, BinarySerializerOptions options, ref WriteStack state)
+    {
+        
+        BinaryClassInfo classInfo = state.Current.BinaryClassInfo;
+        if (classInfo.CountMethodDelegate == null)
         {
-            
-            BinaryClassInfo classInfo = state.Current.BinaryClassInfo;
+            classInfo.CountMethodDelegate = options.MemberAccessorStrategy.CreateIEnumerableCountMethod<TCollection>();
             if (classInfo.CountMethodDelegate == null)
             {
-                classInfo.CountMethodDelegate = options.MemberAccessorStrategy.CreateIEnumerableCountMethod<TCollection>();
-                if (classInfo.CountMethodDelegate == null)
+                Func<TCollection, int> linqCountDelegate = (collection) =>
                 {
-                    Func<TCollection, int> linqCountDelegate = (collection) =>
+                    var enumerator = value.GetEnumerator();
+                    if (!enumerator.MoveNext())
                     {
-                        var enumerator = value.GetEnumerator();
-                        if (!enumerator.MoveNext())
-                        {
-                            return 0;
-                        }
-                        int index = 0;
-                        do
-                        {
-                            index++;
-                        } while (enumerator.MoveNext());
+                        return 0;
+                    }
+                    int index = 0;
+                    do
+                    {
+                        index++;
+                    } while (enumerator.MoveNext());
 
-                        return index;
-                    };
-                    classInfo.CountMethodDelegate = linqCountDelegate;
-                }
+                    return index;
+                };
+                classInfo.CountMethodDelegate = linqCountDelegate;
             }
-            Func<TCollection, int> countDelegate = state.Current.BinaryClassInfo.CountMethodDelegate as Func<TCollection, int>;
-            return countDelegate(value);
+        }
+        Func<TCollection, int> countDelegate = state.Current.BinaryClassInfo.CountMethodDelegate as Func<TCollection, int>;
+        return countDelegate(value);
+    }
+
+    protected override bool OnWriteResume(BinaryWriter writer, TCollection value, BinarySerializerOptions options, ref WriteStack state)
+    {
+        IEnumerator enumerator;
+        if (state.Current.CollectionEnumerator == null)
+        {
+            enumerator = value.GetEnumerator();
+            if (!enumerator.MoveNext())
+            {
+                return true;
+            }
+        }
+        else
+        {
+            enumerator = (IEnumerator)state.Current.CollectionEnumerator;
         }
 
-        protected override bool OnWriteResume(BinaryWriter writer, TCollection value, BinarySerializerOptions options, ref WriteStack state)
+        BinaryConverter<object> converter = GetElementConverter(ref state);
+        int index = state.Current.EnumeratorIndex;
+        if (!state.SupportContinuation)
         {
-            IEnumerator enumerator;
-            if (state.Current.CollectionEnumerator == null)
+            do
             {
-                enumerator = value.GetEnumerator();
-                if (!enumerator.MoveNext())
-                {
-                    return true;
-                }
-            }
-            else
-            {
-                enumerator = (IEnumerator)state.Current.CollectionEnumerator;
-            }
+                state.Current.WriteEnumerableIndex(index, writer);
+                object element = enumerator.Current;
+                converter.TryWrite(writer, element, options, ref state);
+                // 列表状态下，每个写每个元素时独立的，故需清理多态属性
+                state.Current.PolymorphicBinaryPropertyInfo = null;
+                index++;
+            } while (enumerator.MoveNext());
 
-            BinaryConverter<object> converter = GetElementConverter(ref state);
-            int index = state.Current.EnumeratorIndex;
-            if (!state.SupportContinuation)
+        }
+        else
+        {
+            do
             {
-                do
+                if (ShouldFlush(writer, ref state))
+                {
+                    state.Current.CollectionEnumerator = enumerator;
+                    return false;
+                }
+
+                if (!state.Current.ProcessedEnumerableIndex)
                 {
                     state.Current.WriteEnumerableIndex(index, writer);
-                    object element = enumerator.Current;
-                    converter.TryWrite(writer, element, options, ref state);
-                    // 列表状态下，每个写每个元素时独立的，故需清理多态属性
-                    state.Current.PolymorphicBinaryPropertyInfo = null;
-                    index++;
-                } while (enumerator.MoveNext());
+                    state.Current.ProcessedEnumerableIndex = true;
+                }
 
-            }
-            else
-            {
-                do
+                object element = enumerator.Current;
+                if (!converter.TryWrite(writer, element, options, ref state))
                 {
-                    if (ShouldFlush(writer, ref state))
-                    {
-                        state.Current.CollectionEnumerator = enumerator;
-                        return false;
-                    }
+                    state.Current.CollectionEnumerator = enumerator;
+                    state.Current.EnumeratorIndex = index;
+                    return false;
+                }
 
-                    if (!state.Current.ProcessedEnumerableIndex)
-                    {
-                        state.Current.WriteEnumerableIndex(index, writer);
-                        state.Current.ProcessedEnumerableIndex = true;
-                    }
+                // 列表状态下，每个写每个元素时独立的，故需清理多态属性
+                state.Current.PolymorphicBinaryPropertyInfo = null;
+                state.Current.ProcessedEnumerableIndex = false;
+                index++;
 
-                    object element = enumerator.Current;
-                    if (!converter.TryWrite(writer, element, options, ref state))
-                    {
-                        state.Current.CollectionEnumerator = enumerator;
-                        state.Current.EnumeratorIndex = index;
-                        return false;
-                    }
+            } while (enumerator.MoveNext());
 
-                    // 列表状态下，每个写每个元素时独立的，故需清理多态属性
-                    state.Current.PolymorphicBinaryPropertyInfo = null;
-                    state.Current.ProcessedEnumerableIndex = false;
-                    index++;
-
-                } while (enumerator.MoveNext());
-
-            }
-
-            return true;
         }
+
+        return true;
     }
 }

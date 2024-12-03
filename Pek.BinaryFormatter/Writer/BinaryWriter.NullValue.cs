@@ -1,4 +1,4 @@
-﻿namespace Xfrogcn.BinaryFormatter
+﻿namespace Pek.BinaryFormatter
 {
     public sealed partial class BinaryWriter
     {

@@ -1,89 +1,88 @@
 ﻿using System.Collections;
 
-namespace Xfrogcn.BinaryFormatter.Serialization.Converters
+namespace Pek.BinaryFormatter;
+
+internal class IDictionaryConverter<TCollection>
+    : DictionaryDefaultConverter<TCollection, object, object>
+    where TCollection : IDictionary
 {
-    internal class IDictionaryConverter<TCollection>
-        : DictionaryDefaultConverter<TCollection, object, object>
-        where TCollection : IDictionary
+    protected override void Add(object key, in object value, BinarySerializerOptions options, ref ReadStack state)
     {
-        protected override void Add(object key, in object value, BinarySerializerOptions options, ref ReadStack state)
+        TCollection collection = (TCollection)state.Current.ReturnValue!;
+        collection[key] = value;
+        if (IsValueType)
         {
-            TCollection collection = (TCollection)state.Current.ReturnValue!;
-            collection[key] = value;
-            if (IsValueType)
-            {
-                state.Current.ReturnValue = collection;
-            };
+            state.Current.ReturnValue = collection;
+        };
+    }
+
+    protected override void CreateCollection(ref BinaryReader reader, ref ReadStack state)
+    {
+        BinaryClassInfo classInfo = state.Current.BinaryClassInfo;
+        TCollection returnValue = (TCollection)classInfo.CreateObject()!;
+
+        if (returnValue.IsReadOnly)
+        {
+            ThrowHelper.ThrowNotSupportedException_CannotPopulateCollection(TypeToConvert, ref reader, ref state);
         }
 
-        protected override void CreateCollection(ref BinaryReader reader, ref ReadStack state)
-        {
-            BinaryClassInfo classInfo = state.Current.BinaryClassInfo;
-            TCollection returnValue = (TCollection)classInfo.CreateObject()!;
+        state.Current.ReturnValue = returnValue;
+    }
 
-            if (returnValue.IsReadOnly)
+    protected internal override bool OnWriteResume(BinaryWriter writer, TCollection dictionary, BinarySerializerOptions options, ref WriteStack state)
+    {
+        IDictionaryEnumerator enumerator;
+        if (state.Current.CollectionEnumerator == null)
+        {
+            enumerator = dictionary.GetEnumerator();
+            if (!enumerator.MoveNext())
             {
-                ThrowHelper.ThrowNotSupportedException_CannotPopulateCollection(TypeToConvert, ref reader, ref state);
+                return true;
             }
-
-            state.Current.ReturnValue = returnValue;
+        }
+        else
+        {
+            enumerator = (IDictionaryEnumerator)state.Current.CollectionEnumerator;
         }
 
-        protected internal override bool OnWriteResume(BinaryWriter writer, TCollection dictionary, BinarySerializerOptions options, ref WriteStack state)
+        if (!state.SupportContinuation)
         {
-            IDictionaryEnumerator enumerator;
-            if (state.Current.CollectionEnumerator == null)
+            do
             {
-                enumerator = dictionary.GetEnumerator();
-                if (!enumerator.MoveNext())
+                WriteKey(writer, enumerator.Key, options, ref state);
+                WriteValue(writer, enumerator.Value, options, ref state);
+
+                state.Current.EndDictionaryElement();
+            } while (enumerator.MoveNext());
+
+        }
+        else
+        {
+            do
+            {
+                if (ShouldFlush(writer, ref state))
                 {
-                    return true;
+                    state.Current.CollectionEnumerator = enumerator;
+                    return false;
                 }
-            }
-            else
-            {
-                enumerator = (IDictionaryEnumerator)state.Current.CollectionEnumerator;
-            }
 
-            if (!state.SupportContinuation)
-            {
-                do
+                if (!WriteKey(writer, enumerator.Key, options, ref state))
                 {
-                    WriteKey(writer, enumerator.Key, options, ref state);
-                    WriteValue(writer, enumerator.Value, options, ref state);
+                    state.Current.CollectionEnumerator = enumerator;
+                    return false;
+                }
 
-                    state.Current.EndDictionaryElement();
-                } while (enumerator.MoveNext());
-
-            }
-            else
-            {
-                do
+                if (!WriteValue(writer, enumerator.Value, options, ref state))
                 {
-                    if (ShouldFlush(writer, ref state))
-                    {
-                        state.Current.CollectionEnumerator = enumerator;
-                        return false;
-                    }
+                    state.Current.CollectionEnumerator = enumerator;
+                    return false;
+                }
 
-                    if (!WriteKey(writer, enumerator.Key, options, ref state))
-                    {
-                        state.Current.CollectionEnumerator = enumerator;
-                        return false;
-                    }
+                state.Current.EndDictionaryElement();
+            } while (enumerator.MoveNext());
 
-                    if (!WriteValue(writer, enumerator.Value, options, ref state))
-                    {
-                        state.Current.CollectionEnumerator = enumerator;
-                        return false;
-                    }
-
-                    state.Current.EndDictionaryElement();
-                } while (enumerator.MoveNext());
-
-            }
-
-            return true;
         }
+
+        return true;
     }
 }

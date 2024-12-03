@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 
-namespace Xfrogcn.BinaryFormatter.Serialization.Converters
+namespace Pek.BinaryFormatter.Serialization.Converters
 {
     /// <summary>
     /// 当有参数构造的构造参数数量大于UnboxedParameterCountThreshold设定值时(默认为4)，使用此转换器

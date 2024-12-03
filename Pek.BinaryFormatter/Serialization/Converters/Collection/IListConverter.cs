@@ -1,88 +1,84 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections;
 
-namespace Xfrogcn.BinaryFormatter.Serialization.Converters
+namespace Pek.BinaryFormatter;
+
+internal sealed class IListConverter<TCollection>
+    : IEnumerableDefaultConverter<TCollection, object>
+    where TCollection : IList
 {
-    internal sealed class IListConverter<TCollection>
-        : IEnumerableDefaultConverter<TCollection, object>
-        where TCollection : IList
+    protected override void Add(in object value, ref ReadStack state)
     {
-        protected override void Add(in object value, ref ReadStack state)
+        ((IList)state.Current.ReturnValue!).Add(value);
+    }
+
+    protected override void CreateCollection(ref BinaryReader reader, ref ReadStack state, BinarySerializerOptions options, ulong len)
+    {
+        if (state.Current.BinaryClassInfo.CreateObject == null)
         {
-            ((IList)state.Current.ReturnValue!).Add(value);
+            ThrowHelper.ThrowNotSupportedException_SerializationNotSupported(state.Current.BinaryClassInfo.Type);
         }
 
-        protected override void CreateCollection(ref BinaryReader reader, ref ReadStack state, BinarySerializerOptions options, ulong len)
+        state.Current.ReturnValue = state.Current.BinaryClassInfo.CreateObject();
+    }
+
+    protected override long GetLength(TCollection value, BinarySerializerOptions options, ref WriteStack state)
+    {
+        return value.Count;
+    }
+
+    protected override bool OnWriteResume(BinaryWriter writer, TCollection value, BinarySerializerOptions options, ref WriteStack state)
+    {
+        IList list = value;
+
+        // Using an index is 2x faster than using an enumerator.
+        int index = state.Current.EnumeratorIndex;
+        BinaryConverter<object> elementConverter = GetElementConverter(ref state);
+
+        if (!state.SupportContinuation)
         {
-            if (state.Current.BinaryClassInfo.CreateObject == null)
+            for (; index < list.Count; index++)
             {
-                ThrowHelper.ThrowNotSupportedException_SerializationNotSupported(state.Current.BinaryClassInfo.Type);
+                state.Current.WriteEnumerableIndex(index, writer);
+
+                object element = list[index];
+                elementConverter.TryWrite(writer, element, options, ref state);
+
+                state.Current.PolymorphicBinaryPropertyInfo = null;
             }
 
-            state.Current.ReturnValue = state.Current.BinaryClassInfo.CreateObject();
         }
-
-        protected override long GetLength(TCollection value, BinarySerializerOptions options, ref WriteStack state)
+        else
         {
-            return value.Count;
-        }
-
-        protected override bool OnWriteResume(BinaryWriter writer, TCollection value, BinarySerializerOptions options, ref WriteStack state)
-        {
-            IList list = value;
-
-            // Using an index is 2x faster than using an enumerator.
-            int index = state.Current.EnumeratorIndex;
-            BinaryConverter<object> elementConverter = GetElementConverter(ref state);
-
-            if (!state.SupportContinuation)
+            for (; index < list.Count; index++)
             {
-                for (; index < list.Count; index++)
+                if (!state.Current.ProcessedEnumerableIndex)
                 {
                     state.Current.WriteEnumerableIndex(index, writer);
-
-                    object element = list[index];
-                    elementConverter.TryWrite(writer, element, options, ref state);
-
-                    state.Current.PolymorphicBinaryPropertyInfo = null;
+                    state.Current.ProcessedEnumerableIndex = true;
                 }
 
-            }
-            else
-            {
-                for (; index < list.Count; index++)
+                object element = list[index];
+                if (!elementConverter.TryWrite(writer, element, options, ref state))
                 {
-                    if (!state.Current.ProcessedEnumerableIndex)
-                    {
-                        state.Current.WriteEnumerableIndex(index, writer);
-                        state.Current.ProcessedEnumerableIndex = true;
-                    }
-
-                    object element = list[index];
-                    if (!elementConverter.TryWrite(writer, element, options, ref state))
-                    {
-                        state.Current.EnumeratorIndex = index;
-                        return false;
-                    }
-
-                    state.Current.PolymorphicBinaryPropertyInfo = null;
-                    state.Current.ProcessedEnumerableIndex = false;
-
-                    if (ShouldFlush(writer, ref state))
-                    {
-                        state.Current.EnumeratorIndex = ++index;
-                        return false;
-                    }
+                    state.Current.EnumeratorIndex = index;
+                    return false;
                 }
 
+                state.Current.PolymorphicBinaryPropertyInfo = null;
+                state.Current.ProcessedEnumerableIndex = false;
+
+                if (ShouldFlush(writer, ref state))
+                {
+                    state.Current.EnumeratorIndex = ++index;
+                    return false;
+                }
             }
 
-
-            return true;
         }
 
 
+        return true;
     }
+
+
 }

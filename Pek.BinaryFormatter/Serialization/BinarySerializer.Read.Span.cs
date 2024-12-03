@@ -1,7 +1,7 @@
 ﻿using System;
-using Xfrogcn.BinaryFormatter.Serialization;
+using Pek.BinaryFormatter.Serialization;
 
-namespace Xfrogcn.BinaryFormatter
+namespace Pek.BinaryFormatter
 {
     public static partial class BinarySerializer
     {

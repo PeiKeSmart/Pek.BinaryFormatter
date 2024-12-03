@@ -7,7 +7,7 @@ using System.Numerics;
 using System.Reflection;
 using static System.TimeZoneInfo;
 
-namespace Xfrogcn.BinaryFormatter
+namespace Pek.BinaryFormatter
 {
     public class DefaultTypeResolver : TypeResolver
     {

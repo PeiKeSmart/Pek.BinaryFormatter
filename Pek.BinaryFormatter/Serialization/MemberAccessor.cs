@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
-using static Xfrogcn.BinaryFormatter.BinaryClassInfo;
+using static Pek.BinaryFormatter.BinaryClassInfo;
 
-namespace Xfrogcn.BinaryFormatter.Serialization
+namespace Pek.BinaryFormatter.Serialization
 {
     internal abstract class MemberAccessor
     {

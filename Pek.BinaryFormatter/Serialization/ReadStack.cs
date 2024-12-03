@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Text;
-using Xfrogcn.BinaryFormatter.Serialization;
+using Pek.BinaryFormatter.Serialization;
 
-namespace Xfrogcn.BinaryFormatter
+namespace Pek.BinaryFormatter
 {
     [DebuggerDisplay("Path:{BinaryPath()} Current: ClassType.{Current.BinaryClassInfo.ClassType}, {Current.BinaryClassInfo.Type.Name}")]
     internal struct ReadStack

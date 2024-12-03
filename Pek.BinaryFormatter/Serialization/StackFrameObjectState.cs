@@ -1,5 +1,5 @@
 ﻿using System;
-namespace Xfrogcn.BinaryFormatter
+namespace Pek.BinaryFormatter
 {
     internal enum StackFrameObjectState : byte
     {

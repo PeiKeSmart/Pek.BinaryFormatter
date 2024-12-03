@@ -1,15 +1,12 @@
-﻿using System;
-using System.Diagnostics;
-using System.Numerics;
+﻿using System.Diagnostics;
 
-namespace Xfrogcn.BinaryFormatter
+namespace Pek.BinaryFormatter;
+
+public ref partial struct BinaryReader
 {
-    public ref partial struct BinaryReader
+    public Guid GetGuid()
     {
-        public Guid GetGuid()
-        {
-            Debug.Assert(ValueSpan.Length == 16);
-            return new Guid(ValueSpan);
-        }
+        Debug.Assert(ValueSpan.Length == 16);
+        return new Guid(ValueSpan);
     }
 }

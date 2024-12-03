@@ -4,9 +4,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using Xfrogcn.BinaryFormatter.Serialization;
+using Pek.BinaryFormatter.Serialization;
 
-namespace Xfrogcn.BinaryFormatter
+namespace Pek.BinaryFormatter
 {
     public static partial class BinarySerializer
     {

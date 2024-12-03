@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace Xfrogcn.BinaryFormatter.Serialization
+namespace Pek.BinaryFormatter.Serialization
 {
     /// <summary>
     /// Represents a strongly-typed parameter to prevent boxing where have less than 4 parameters.

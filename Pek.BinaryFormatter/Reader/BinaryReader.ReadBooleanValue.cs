@@ -1,30 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
+﻿using System.Diagnostics;
 
-namespace Xfrogcn.BinaryFormatter
+namespace Pek.BinaryFormatter;
+
+public ref partial struct BinaryReader
 {
-    public ref partial struct BinaryReader
+    public bool ReadBooleanValue()
     {
-        public bool ReadBooleanValue()
+        if (ReadBytes(1, out var val))
         {
-            if (ReadBytes(1, out ReadOnlySpan<byte> val))
-            {
-                return val[0] == 0 ? false : true;
-            }
-
-            throw new InvalidOperationException();
-
+            return val[0] == 0 ? false : true;
         }
 
-        public bool GetBoolean()
-        {
-            ReadOnlySpan<byte> span = ValueSpan;
+        throw new InvalidOperationException();
 
-            Debug.Assert(span.Length == 1);
-            return span[0] == 0 ? false : true;
+    }
 
-        }
+    public Boolean GetBoolean()
+    {
+        var span = ValueSpan;
+
+        Debug.Assert(span.Length == 1);
+        return span[0] == 0 ? false : true;
+
     }
 }

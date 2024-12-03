@@ -1,4 +1,4 @@
-﻿namespace Xfrogcn.BinaryFormatter
+﻿namespace Pek.BinaryFormatter
 {
     /// <summary>
     /// 内部类型

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Xfrogcn.BinaryFormatter
+namespace Pek.BinaryFormatter
 {
     public static partial class BinarySerializer
     {

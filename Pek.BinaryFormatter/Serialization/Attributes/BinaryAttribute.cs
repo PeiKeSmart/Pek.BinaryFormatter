@@ -1,11 +1,8 @@
-﻿using System;
+﻿namespace Pek.BinaryFormatter;
 
-namespace Xfrogcn.BinaryFormatter.Serialization
+/// <summary>
+/// The base class of serialization attributes.
+/// </summary>
+public abstract class BinaryAttribute : Attribute
 {
-    /// <summary>
-    /// The base class of serialization attributes.
-    /// </summary>
-    public abstract class BinaryAttribute : Attribute
-    {
-    }
 }

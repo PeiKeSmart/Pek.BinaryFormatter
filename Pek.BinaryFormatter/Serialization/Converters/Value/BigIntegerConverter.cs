@@ -1,25 +1,23 @@
-﻿using System;
-using System.Numerics;
+﻿using System.Numerics;
 
-namespace Xfrogcn.BinaryFormatter.Serialization.Converters
+namespace Pek.BinaryFormatter;
+
+internal sealed class BigIntegerConverter : BinaryConverter<BigInteger>
 {
-    internal sealed class BigIntegerConverter : BinaryConverter<BigInteger>
+
+    public override BigInteger Read(ref BinaryReader reader, Type typeToConvert, BinarySerializerOptions options)
     {
+        return reader.GetBigInteger();
+    }
 
-        public override BigInteger Read(ref BinaryReader reader, Type typeToConvert, BinarySerializerOptions options)
-        {
-            return reader.GetBigInteger();
-        }
+    public override void SetTypeMetadata(BinaryTypeInfo typeInfo, TypeMap typeMap, BinarySerializerOptions options)
+    {
+        typeInfo.Type = TypeEnum.BigInteger;
+        typeInfo.SerializeType = ClassType.Value;
+    }
 
-        public override void SetTypeMetadata(BinaryTypeInfo typeInfo, TypeMap typeMap, BinarySerializerOptions options)
-        {
-            typeInfo.Type = TypeEnum.BigInteger;
-            typeInfo.SerializeType = ClassType.Value;
-        }
-
-        public override void Write(BinaryWriter writer, BigInteger value, BinarySerializerOptions options)
-        {
-            writer.WriteBigIntegerValue(value);
-        }
+    public override void Write(BinaryWriter writer, BigInteger value, BinarySerializerOptions options)
+    {
+        writer.WriteBigIntegerValue(value);
     }
 }

@@ -3,12 +3,12 @@ using System.Collections.Concurrent;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
-using Xfrogcn.BinaryFormatter.Resources;
-using Xfrogcn.BinaryFormatter.Serialization;
+using Pek.BinaryFormatter.Resources;
+using Pek.BinaryFormatter.Serialization;
 
-[assembly: InternalsVisibleTo("Xfrogcn.BinaryFormatter.Tests")]
+[assembly: InternalsVisibleTo("Pek.BinaryFormatter.Tests")]
 
-namespace Xfrogcn.BinaryFormatter
+namespace Pek.BinaryFormatter
 {
     public sealed partial class BinarySerializerOptions
     {
