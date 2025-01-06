@@ -60,7 +60,7 @@ public static partial class BinarySerializer
         if (value == null)
         {
             writer.Flush();
-            await bufferWriter.WriteToStreamAsync(stream, cancellationToken);
+            await bufferWriter.WriteToStreamAsync(stream, cancellationToken).ConfigureAwait(false);
             bufferWriter.Clear();
             return;
         }
@@ -80,7 +80,7 @@ public static partial class BinarySerializer
 
             isFinalBlock = WriteCore(converterBase, writer, value, options, ref state);
 
-            await bufferWriter.WriteToStreamAsync(stream, cancellationToken);
+            await bufferWriter.WriteToStreamAsync(stream, cancellationToken).ConfigureAwait(false);
 
             bufferWriter.Clear();
 
@@ -91,7 +91,7 @@ public static partial class BinarySerializer
         writer.WriteMetadata(ref state, value.GetType());
         writer.Flush();
 
-        await bufferWriter.WriteToStreamAsync(stream, cancellationToken);
+        await bufferWriter.WriteToStreamAsync(stream, cancellationToken).ConfigureAwait(false);
         bufferWriter.Clear();
     }
 }

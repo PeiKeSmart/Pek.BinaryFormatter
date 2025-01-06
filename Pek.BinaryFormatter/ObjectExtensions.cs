@@ -25,9 +25,9 @@ public static partial class ObjectExtensions
             throw new NotSupportedException($"当前对象未标记特性“{typeof(SerializableAttribute)}”，无法进行DeepClone操作");
         }
         using var ms = new MemoryStream();
-        await BinarySerializer.SerializeAsync(ms, obj);
+        await BinarySerializer.SerializeAsync(ms, obj).ConfigureAwait(false);
         ms.Seek(0, SeekOrigin.Begin);
-        return (T)await BinarySerializer.DeserializeAsync(ms);
+        return (T)await BinarySerializer.DeserializeAsync(ms).ConfigureAwait(false);
     }
 
     #endregion
